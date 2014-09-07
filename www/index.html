@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html class="no-js" lang="fr-FR" ng-app="myApp">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Bonoway Beta</title>
+	<meta name="author" content="JVercout - jerome.vercoutere@gmail.com" />
+	<link rel="shortcut icon" href="favicon.ico" />
+	<meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1.0; user-scalable=0;"/>
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800italic,800"  type="text/css">
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-resource.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"></script>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+	<script type="text/javascript" src="assets/js/plugins/lodash/lodash.min.js"></script>
+	<script type="text/javascript" src="assets/js/plugins/angular-google-maps/angular-google-maps.min.js"></script>
+	<script type="text/javascript" src="assets/js/plugins/angular-local-storage/angular-local-storage.min.js"></script>
+    <script type="text/javascript" src="assets/js/plugins/angular-websql/angular-websql.min.js"></script>
+
+	<script type="text/javascript" src="assets/js/scripts.min.js"></script>
+
+	<link rel="stylesheet" href="assets/css/app.min.css"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/bonoway.css"/>
+    <link rel="stylesheet" href="css/bootstrap-select.min.css"/>
+    
+    <style>
+    
+    
+    .styled select {
+        background: transparent;
+        width: 180px;
+        display: inline;
+        vertical-align: middle;
+        border: 0px solid #ccc;
+        height: 30px;
+        -webkit-appearance: none;
+    }
+    
+    .styled{
+        width: 180px;
+        height: 50px;
+        overflow: hidden;
+        background: url(img/angle1.png) no-repeat 96%;
+    }
+
+.angular-google-map-container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+    
+.map-site {
+        height: 50%;
+        width: 100%;
+        margin:-15px;
+        position: absolute;
+}
+    
+.map-sector {
+        height: 100%;
+        width: 100%;
+        margin:-15px;
+        margin-top: 10px;
+        position: absolute;
+}
+
+.styla{
+    background: #007aff;
+}
+    
+    </style>
+    
+</head>
+
+<body ng-controller="mainController">
+	
+
+    <div class="row primarybar">
+        <a href="#/sites" class="col-xs-2" ng-class="{ here: isActive('/sites')}"> <i class="fa fa-home"></i> </a>
+        <a href="#/search" class="col-xs-2" ng-class="{ here: isActive('/search')}"> <i class="fa fa-search"></i> </a>
+        <a href="#/add" class="col-xs-2" ng-class="{ here: isActive('/add')}"> <i class="fa fa-plus"></i> </a>
+        <a href="#/photo" class="col-xs-2" ng-class="{ here: isActive('/photo')}"> <i class="fa fa-camera"></i> </a>
+        <a href="#/db" class="col-xs-2" ng-class="{ here: isActive('/db')}"> <i class="fa fa-database"></i> </a>
+        <a href="#/about" class="col-xs-2 pull-right" ng-class="{ here: isActive('/about')}"> <i class="fa fa-info"></i> </a>
+    </div>
+	
+	<main role="main" class="container">
+        
+    <div ng-view></div>
+	</main>
+	
+	<footer class="container-fluid">
+		<div class="container text-right">
+			<p>&copy; Copyright (c) Bonoway - 2014</p>
+		</div>
+	</footer>
+
+	<!--  <script>
+	window.globalParams = {};
+	globalParams.urlapp = 'http://beta.bonoway.dev/#';
+	</script>-->
+
+</body>
+</html>
