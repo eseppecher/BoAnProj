@@ -38,15 +38,15 @@ myApp.controller('mainController', function($scope, localStorageService, $locati
     localStorageService.set('line.1','{ "id":1,"name": "Pose ton cul","latitude": 43.136826, "longitude": 6.096699, "images": ["1.jpg", "2.jpg"], "grade": "7a", "site": 1, "sector": 1}');
     localStorageService.set('line.2','{ "id":2,"name": "La force tranquille", "latitude": 43.136826, "longitude": 6.096699, "images": ["1.jpg"], "grade": "7a+", "site": 1, "sector": 1}');
     localStorageService.set('line.3','{ "id":3,"name": "Put your ass", "latitude": 43.136826, "longitude": 6.096699, "images": ["1.jpg"], "grade": "7a+", "site": 1, "sector": 1}');
-    localStorageService.set('line.4','{ "id":4,"name": "Lili", "latitude": 43.136826, "longitude": 6.096699, "grade": "7b+", "images": "1.jpg", "site": 1, "sector": 1}');
-    localStorageService.set('line.5','{ "id":5,"name": "Orange and grey", "latitude": 43.136826, "longitude": 6.096699, "images": "1.jpg", "grade": "7a+", "site": 1, "sector": 1}');
+    localStorageService.set('line.4','{ "id":4,"name": "Lili", "latitude": 43.136826, "longitude": 6.096699, "grade": "7b+", "images": ["1.jpg"], "site": 1, "sector": 1}');
+    localStorageService.set('line.5','{ "id":5,"name": "Orange and grey", "latitude": 43.136826, "longitude": 6.096699, "images": ["1.jpg"], "grade": "7a+", "site": 1, "sector": 1}');
     
     //lines Fenouilllet/Parking
-    localStorageService.set('line.6','{ "id":6,"name": "Pulpe friction", "latitude": 43.136145, "longitude": 6.099227, "images": "1.jpg", "grade": "7a+", "site": 1, "sector": 2}');
-    localStorageService.set('line.7','{ "id":7,"name": "Big traverse", "latitude": 43.136145, "longitude": 6.099227, "images": "1.jpg", "grade": "7a", "site": 1, "sector": 2}');
-    localStorageService.set('line.8','{ "id":8,"name": "N33", "latitude": 43.136145, "longitude": 6.099227, "images": "1.jpg", "grade": "6a", "site": 1, "sector": 2}');
-    localStorageService.set('line.9','{ "id":9,"name": "N30", "latitude": 43.136145, "longitude": 6.099227, "images": "1.jpg", "grade": "6b", "site": 1, "sector": 2}');
-    localStorageService.set('line.10','{ "id":10,"name": "N32", "latitude": 43.136145, "longitude": 6.099227, "images": "1.jpg", "grade": "6b", "site": 1, "sector": 2}');
+    localStorageService.set('line.6','{ "id":6,"name": "Pulpe friction", "latitude": 43.136145, "longitude": 6.099227, "images": ["1.jpg"], "grade": "7a+", "site": 1, "sector": 2}');
+    localStorageService.set('line.7','{ "id":7,"name": "Big traverse", "latitude": 43.136145, "longitude": 6.099227, "images": ["1.jpg"], "grade": "7a", "site": 1, "sector": 2}');
+    localStorageService.set('line.8','{ "id":8,"name": "N33", "latitude": 43.136145, "longitude": 6.099227, "images": ["1.jpg"], "grade": "6a", "site": 1, "sector": 2}');
+    localStorageService.set('line.9','{ "id":9,"name": "N30", "latitude": 43.136145, "longitude": 6.099227, "images": ["1.jpg"], "grade": "6b", "site": 1, "sector": 2}');
+    localStorageService.set('line.10','{ "id":10,"name": "N32", "latitude": 43.136145, "longitude": 6.099227, "images": ["1.jpg"], "grade": "6b", "site": 1, "sector": 2}');
 
     //lines Fenouilllet/Espigoule
     localStorageService.set('line.11','{ "id":11,"name": "Le zèbre", "latitude": 43.138010, "longitude": 6.102571, "grade": "7b", "site": 1, "sector": 3}');

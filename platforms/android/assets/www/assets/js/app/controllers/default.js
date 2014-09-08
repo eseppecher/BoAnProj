@@ -38,15 +38,15 @@ myApp.controller('mainController', function($scope, localStorageService, $locati
     localStorageService.set('line.1','{ "id":1,"name": "Pose ton cul","latitude": 43.136826, "longitude": 6.096699, "images": ["1.jpg", "2.jpg"], "grade": "7a", "site": 1, "sector": 1}');
     localStorageService.set('line.2','{ "id":2,"name": "La force tranquille", "latitude": 43.136826, "longitude": 6.096699, "images": ["1.jpg"], "grade": "7a+", "site": 1, "sector": 1}');
     localStorageService.set('line.3','{ "id":3,"name": "Put your ass", "latitude": 43.136826, "longitude": 6.096699, "images": ["1.jpg"], "grade": "7a+", "site": 1, "sector": 1}');
-    localStorageService.set('line.4','{ "id":4,"name": "Lili", "latitude": 43.136826, "longitude": 6.096699, "grade": "7b+", "images": "1.jpg", "site": "1", "sector": 1}');
-    localStorageService.set('line.5','{ "id":5,"name": "Orange and grey", "latitude": 43.136826, "longitude": 6.096699, "images": "1.jpg", "grade": "7a+", "site": 1, "sector": 1}');
+    localStorageService.set('line.4','{ "id":4,"name": "Lili", "latitude": 43.136826, "longitude": 6.096699, "grade": "7b+", "images": ["1.jpg"], "site": 1, "sector": 1}');
+    localStorageService.set('line.5','{ "id":5,"name": "Orange and grey", "latitude": 43.136826, "longitude": 6.096699, "images": ["1.jpg"], "grade": "7a+", "site": 1, "sector": 1}');
     
     //lines Fenouilllet/Parking
-    localStorageService.set('line.6','{ "id":6,"name": "Pulpe friction", "latitude": 43.136145, "longitude": 6.099227, "images": "1.jpg", "grade": "7a+", "site": 1, "sector": 2}');
-    localStorageService.set('line.7','{ "id":7,"name": "Big traverse", "latitude": 43.136145, "longitude": 6.099227, "images": "1.jpg", "grade": "7a", "site": 1, "sector": 2}');
-    localStorageService.set('line.8','{ "id":8,"name": "N33", "latitude": 43.136145, "longitude": 6.099227, "images": "1.jpg", "grade": "6a", "site": 1, "sector": 2}');
-    localStorageService.set('line.9','{ "id":9,"name": "N30", "latitude": 43.136145, "longitude": 6.099227, "images": "1.jpg", "grade": "6b", "site": 1, "sector": 2}');
-    localStorageService.set('line.10','{ "id":10,"name": "N32", "latitude": 43.136145, "longitude": 6.099227, "images": "1.jpg", "grade": "6b", "site": 1, "sector": 2}');
+    localStorageService.set('line.6','{ "id":6,"name": "Pulpe friction", "latitude": 43.136145, "longitude": 6.099227, "images": ["1.jpg"], "grade": "7a+", "site": 1, "sector": 2}');
+    localStorageService.set('line.7','{ "id":7,"name": "Big traverse", "latitude": 43.136145, "longitude": 6.099227, "images": ["1.jpg"], "grade": "7a", "site": 1, "sector": 2}');
+    localStorageService.set('line.8','{ "id":8,"name": "N33", "latitude": 43.136145, "longitude": 6.099227, "images": ["1.jpg"], "grade": "6a", "site": 1, "sector": 2}');
+    localStorageService.set('line.9','{ "id":9,"name": "N30", "latitude": 43.136145, "longitude": 6.099227, "images": ["1.jpg"], "grade": "6b", "site": 1, "sector": 2}');
+    localStorageService.set('line.10','{ "id":10,"name": "N32", "latitude": 43.136145, "longitude": 6.099227, "images": ["1.jpg"], "grade": "6b", "site": 1, "sector": 2}');
 
     //lines Fenouilllet/Espigoule
     localStorageService.set('line.11','{ "id":11,"name": "Le zèbre", "latitude": 43.138010, "longitude": 6.102571, "grade": "7b", "site": 1, "sector": 3}');
@@ -84,10 +84,6 @@ myApp.controller('mainController', function($scope, localStorageService, $locati
 
 
 myApp.controller('SiteListCtrl', function($scope, $location, localStorageService) {
-                 
-
-	$scope.title	= 'Sites';
-	$scope.message	= 'page 1';
 	
 	$scope.sites = [];
 	//This should be factorize in local storage?
@@ -110,7 +106,7 @@ myApp.controller('SiteListCtrl', function($scope, $location, localStorageService
 
                  
 myApp.controller('SiteDetailCtrl', function($scope, $routeParams, $location, localStorageService) {
-	id = $routeParams.siteId;
+	id = parseInt($routeParams.siteId);
 	$scope.site = localStorageService.get('site.'+ id);
 	
 	/* Get child sector */
@@ -163,8 +159,8 @@ myApp.controller('SiteDetailCtrl', function($scope, $routeParams, $location, loc
 
 
 myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter, localStorageService) {
-    id = $routeParams.siteId;
-    idd = $routeParams.sectorId;
+    id = parseInt($routeParams.siteId);
+    idd = parseInt($routeParams.sectorId);
     $scope.site = localStorageService.get('site.'+ id); // nécessaire pour la map mais devrait être remplacé par les coordonnées du sector
     
     $scope.currency = idd;
@@ -173,7 +169,7 @@ myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter
             $result = [];
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
-                if(item.sector == x) { $result.push(item); }
+                if(item.sector === x) { $result.push(item); }
             }
             return $result;
     };
@@ -198,7 +194,7 @@ myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter
         }
     }
                 
-             
+    
     /* Get child line */
     $scope.list = [];
     hasNext = true;
@@ -217,9 +213,9 @@ myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter
     }
                  
     $scope.select = function(xid) {
-        if(xid==0){
+        if(xid === 0){
             $scope.current = { "id":0,"name": "Toutes les voies"};
-            return $scope.lines = $scope.list;
+            $scope.lines = $scope.list;
         }
         else{
             $scope.current = localStorageService.get('sector.'+ xid);
@@ -255,9 +251,7 @@ myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter
 
 
 myApp.controller('LineListCtrl', function($scope, $location, localStorageService) {
-	$scope.title	= 'Lines';
-	$scope.message	= 'Lines List';
-	
+/* CURRENTLY UNUSED!!!!!!!!!!!!!!!!! */
 	$scope.lines = [];
 	hasNext = true;
 	i = 1;
@@ -287,8 +281,8 @@ myApp.controller('LineListCtrl', function($scope, $location, localStorageService
 });
 
 myApp.controller('LineDetailCtrl', function($scope, $routeParams, $location, localStorageService) {
-	id = $routeParams.lineId;
-                 idSite = $routeParams.siteId;
+	id = parseInt($routeParams.lineId);
+    idSite = parseInt($routeParams.siteId);
 	$scope.line = localStorageService.get('line.'+ id);
     $scope.site = localStorageService.get('site.'+ id);
 
@@ -300,9 +294,6 @@ myApp.controller('LineDetailCtrl', function($scope, $routeParams, $location, loc
 
 
 myApp.controller('addCtrl', function($scope, $location, localStorageService) {
-   
-    $scope.title	= 'Ajout de blocs';
-    $scope.message	= 'En dévelopement';
     
 
     $scope.sites = [];

@@ -32,49 +32,8 @@
     <link rel="stylesheet" href="css/bootstrap-select.min.css"/>
     
     <style>
-    
-    
-    .styled select {
-        background: transparent;
-        width: 180px;
-        display: inline;
-        vertical-align: middle;
-        border: 0px solid #ccc;
-        height: 30px;
-        -webkit-appearance: none;
-    }
-    
-    .styled{
-        width: 180px;
-        height: 50px;
-        overflow: hidden;
-        background: url(img/angle1.png) no-repeat 96%;
-    }
 
-.angular-google-map-container {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-}
-    
-.map-site {
-        height: 50%;
-        width: 100%;
-        margin:-15px;
-        position: absolute;
-}
-    
-.map-sector {
-        height: 100%;
-        width: 100%;
-        margin:-15px;
-        margin-top: 10px;
-        position: absolute;
-}
 
-.styla{
-    background: #007aff;
-}
     
     </style>
     
@@ -92,16 +51,13 @@
         <a href="#/about" class="col-xs-2 pull-right" ng-class="{ here: isActive('/about')}"> <i class="fa fa-info"></i> </a>
     </div>
 	
-	<main role="main" class="container">
+	<main role="main" class="container-fluid adjust">
         
     <div ng-view></div>
+    
 	</main>
 	
-	<footer class="container-fluid">
-		<div class="container text-right">
-			<p>&copy; Copyright (c) Bonoway - 2014</p>
-		</div>
-	</footer>
+
 
 	<!--  <script>
 	window.globalParams = {};
