@@ -19,6 +19,10 @@ a:hover {
     outline: 0;
 }
 
+.actif{
+    color: #007aff;
+}
+
 
 .list-group-item > .badge{
     
@@ -152,8 +156,8 @@ a:hover {
 }
 
 .secondarybar .dropdown .here{
-color: #007aff;
-background: #ECEDED;
+    color: #007aff;
+    background: #ECEDED;
 }
 
 /* icon on the right of the bar to switch of view list/map */
@@ -166,7 +170,7 @@ background: #ECEDED;
     padding-top: 20px;
     padding-right: 10px;
     color: #007aff;
-     display: inline-block;
+    display: inline-block;
 }
 
 .col-xs-8{
@@ -244,6 +248,34 @@ background: #ECEDED;
     width: 100%;
     height: 100%;
 }
+
+/* Site couverture design */
+.couverture{
+    position: relative;
+    width: 100%;
+    max-height: 120px;
+    overflow: hidden;
+}
+
+.couverture .title{
+    position: absolute;
+    z-index: 2;
+    position: absolute;
+    width: 100%;
+    color: #FEFEFE;
+    text-shadow:#4E5053 0.3px 0.3px,
+    #4E5053 -0.3px 0.3px,
+    #4E5053 -0.3px -0.3px,
+    #4E5053 0.3px -0.3px;
+}
+
+.couverture .image{
+    margin-top: -50%;
+    padding-top: 60px;
+    opacity: .7;
+    width: 100%;
+}
+
 /* _________________________________________________________ */
 
 
