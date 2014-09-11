@@ -1,14 +1,40 @@
 
 
 //Main controller
-myApp.controller('mainController', function($scope, localStorageService, $location) {
+myApp.controller('mainController', function($scope, localStorageService, $location, $webSql) {
 
 	$scope.title	= 'Homepage';
-	$scope.message	= 'home';
                  
     $scope.isActive = function (viewLocation) {
             return viewLocation === $location.path();
     };
+                 
+     //WEB SQL filling database
+       
+    // getting from html file with json architecture
+    var dataLines = [];
+    $.ajax({ url: 'datas/html/lines.html', type: 'get', async: false, success: function(html, $scope) { dataLines = angular.fromJson( String(html);}});
+                 
+                 
+    // opening db
+    $scope.db = $webSql.openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024);
+    // deleting table lines
+    $scope.db.dropTable("lines");
+    // creating table lines
+    $scope.db.createTable('lines', { "id":{"type":"INTEGER"},"name":{ "type": "TEXT"}, "grade": { "type": "TEXT" }, "rate": { "type": "INTEGER" }, "latitude": { "type": "TEXT" }, "longitude": { "type": "TEXT" }, "description": { "type": "TEXT" }, "image": { "type": "TEXT" }, "site": { "type": "INTEGER" }, "sector": { "type": "INTEGER" } });
+    
+    // filling lines table with data
+    for(var i=0; i< dataLines.length; i++){
+        $scope.db.insert('lines', {"id": dataLines[i].id, "name": dataLines[i].name, "grade": dataLines[i].grade, "rate": dataLines[i].rate, "latitude": dataLines[i].latitude, "longitude": dataLines[i].longitude, "description": dataLines[i].description, "image": dataLines[i].image, "site": dataLines[i].site, "sector": dataLines[i].sector}).then(function(results) { console.log(results.insertId); });
+    }
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
                  
     localStorageService.clearAll();
                  
@@ -388,31 +414,14 @@ myApp.controller('photoCtrl', function($scope, $rootScope) {
 
 myApp.controller('dbCtrl', function($scope, $webSql) {
     
-    $scope.message = " Test DB ";
-                 
     $scope.db = $webSql.openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024);
-    
-    alert("db should be open by now");
-    alert("ready to select!");
-    
-    
-    $scope.db.createTable('user', { "username":{ "type": "TEXT"}, "age": { "type": "INTEGER" } });
-                 alert("ready to select!");
                  
-    $scope.db.insert('user', {"username": 'bob', "age": 22}).then(function(results) { console.log(results.insertId); });
-                 alert("ready to select!");
-    
-    $scope.db.insert('user', {"username": 'steeve', "age": 31}).then(function(results) { console.log(results.insertId); });
-    
-                 alert("ready to select!");
-                 
-    $scope.db.selectAll("user").then(function(results) {
-                        $scope.users = [];
-                                                  for(var i=0; i < results.rows.length; i++){
-                                                  $scope.users.push(results.rows.item(i));
-                                     alert(i);
-                                                  }
-                                     });
+    $scope.db.select("lines", { "site": { "value": 1, "union": 'AND'}, "sector": {"value": 2}}).then(function(results) {
+            $scope.lines = [];
+            for(i=0; i < results.rows.length; i++){
+                $scope.lines.push(results.rows.item(i));
+            }
+    });
 
                  
 });
