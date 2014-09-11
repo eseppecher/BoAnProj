@@ -2,9 +2,29 @@
 DB testing
 
 
-----------------------
+---------- Sites ------------ <br> <br> <br>
 
-<div class="row" ng-repeat="line in lines" ng-click="detail(line.id)">
+<div class="row" ng-repeat="site in sites">
+    <h4>
+        <div class="col-xs-7" ng-bind-html="site.name"> </div>
+        <div class="col-xs-2"> {{site.volume}} </div>
+    </h4>
+</div>
+
+
+<br> <br> <br> ---------- Sectors ------------ <br> <br> <br>
+
+<div class="row" ng-repeat="sector in sectors">
+    <h4>
+        <div class="col-xs-7" ng-bind-html="sector.name"> </div>
+        <div class="col-xs-2" > {{sector.volume}} </div>
+    </h4>
+</div>
+
+<br> <br> <br> ---------- Lines ------------ <br> <br> <br>
+
+
+<div class="row" ng-repeat="line in lines">
     <h4>
         <div class="col-xs-7" ng-bind-html="line.name"> </div>
         <div class="col-xs-2" ng-bind-html="line.grade"> </div>
@@ -16,6 +36,12 @@ DB testing
         </small></h5>
 </div>
 
-<br>
 
-----------------------
+<br> <br> <br> ---------- Parkings ------------ <br> <br> <br>
+
+<div class="row" ng-repeat="praking in parkings">
+    <h4>
+        <div class="col-xs-2" > {{parking.latitude}} </div>
+        <div class="col-xs-7"> {{parking.site}} </div>
+    </h4>
+</div>

@@ -1,4 +1,5 @@
 
+var db;
 
 //Main controller
 myApp.controller('mainController', function($scope, localStorageService, $location, $webSql) {
@@ -10,7 +11,6 @@ myApp.controller('mainController', function($scope, localStorageService, $locati
     };
                  
      //WEB SQL filling database
-       
     // reading from html files with json architecture
     var dataSites, dataSectors, dataLines, dataParkings = [];
     $.ajax({ url: 'datas/html/sites.html', type:'get', async:false, success: function(html, $scope) { dataSites = angular.fromJson( String(html)); } });
@@ -19,38 +19,38 @@ myApp.controller('mainController', function($scope, localStorageService, $locati
     $.ajax({ url: 'datas/html/parkings.html', type:'get', async:false, success: function(html, $scope) { dataParkings = angular.fromJson( String(html)); } });
            
                  
-    $scope.db = $webSql.openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024); // opening db
+    db = $webSql.openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024); // opening db
     
     // deleting tables making room for new data and dat architecture
-    $scope.db.dropTable("sites");
-    $scope.db.dropTable("sectors");
-    $scope.db.dropTable("lines");
-    $scope.db.dropTable("parkings");
-                 
+    db.dropTable("sites");
+    db.dropTable("sectors");
+    db.dropTable("lines");
+    db.dropTable("parkings");
+               
     // creating tables
-    $scope.db.createTable('sites', { "id":{"type":"INTEGER"},"name":{ "type": "TEXT"}, "description": { "type": "TEXT"}, "couverture": { "type": "TEXT" }, "latitude": { "type": "TEXT" }, "longitude": { "type": "TEXT" }, "volume": { "type": "INTEGER" } });
+    db.createTable('sites', { "id":{"type":"INTEGER"},"name":{ "type": "TEXT"}, "description": { "type": "TEXT"}, "tags": { "type": "TEXT"}, "couverture": { "type": "TEXT" }, "latitude": { "type": "TEXT" }, "longitude": { "type": "TEXT" }, "volume": { "type": "INTEGER" } });
     
-    $scope.db.createTable('sectors', { "id":{"type":"INTEGER"},"name":{ "type": "TEXT"}, "latitude": { "type": "TEXT" }, "longitude": { "type": "TEXT" }, "approach": { "type": "TEXT" }, "volume": { "type": "INTEGER" }, "site": { "type": "INTEGER" } });
+    db.createTable('sectors', { "id":{"type":"INTEGER"},"name":{ "type": "TEXT"}, "latitude": { "type": "TEXT" }, "longitude": { "type": "TEXT" }, "approach": { "type": "TEXT" }, "volume": { "type": "INTEGER" }, "site": { "type": "INTEGER" } });
                  
-    $scope.db.createTable('lines', { "id":{"type":"INTEGER"},"name":{ "type": "TEXT"}, "grade": { "type": "TEXT" }, "rate": { "type": "INTEGER" }, "latitude": { "type": "TEXT" }, "longitude": { "type": "TEXT" }, "description": { "type": "TEXT" }, "image": { "type": "TEXT" }, "site": { "type": "INTEGER" }, "sector": { "type": "INTEGER" } });
-    $scope.db.createTable('parkings', { "id":{"type":"INTEGER"}, "latitude": { "type": "TEXT" }, "longitude": { "type": "TEXT" }, "site": { "type": "INTEGER" } });
+    db.createTable('lines', { "id":{"type":"INTEGER"},"name":{ "type": "TEXT"}, "grade": { "type": "TEXT" }, "rate": { "type": "INTEGER" }, "latitude": { "type": "TEXT" }, "longitude": { "type": "TEXT" }, "description": { "type": "TEXT" }, "image": { "type": "TEXT" }, "site": { "type": "INTEGER" }, "sector": { "type": "INTEGER" } });
+    db.createTable('parkings', { "id":{"type":"INTEGER"}, "latitude": { "type": "TEXT" }, "longitude": { "type": "TEXT" }, "site": { "type": "INTEGER" } });
     
+
     // filling tables with data
                  
     for(var i=0; i< dataSites.length; i++){
-        $scope.db.insert('sites', {"id": dataSites[i].id, "name": dataSites[i].name, "description": dataSites[i].description, "couverture": dataSites[i].couverture, "latitude": dataSites[i].latitude, "longitude": dataSites[i].longitude, "volume": dataSites[i].volume}).then(function(results) { console.log(results.insertId); });
+        db.insert('sites', {"id": dataSites[i].id, "name": dataSites[i].name, "description": dataSites[i].description, "tags": dataSites[i].tags, "couverture": dataSites[i].couverture, "latitude": dataSites[i].latitude, "longitude": dataSites[i].longitude, "volume": dataSites[i].volume}).then(function(results) { console.log(results.insertId); });
     }
     for(var i=0; i< dataSectors.length; i++){
-        $scope.db.insert('sectors', {"id": dataSectors[i].id, "name": dataSectors[i].name, "latitude": dataSectors[i].latitude, "longitude": dataSectors[i].longitude, "approach": dataSectors[i].approach, "volume": dataSectors[i].volume}).then(function(results) { console.log(results.insertId); });
+        db.insert('sectors', {"id": dataSectors[i].id, "name": dataSectors[i].name, "latitude": dataSectors[i].latitude, "longitude": dataSectors[i].longitude, "approach": dataSectors[i].approach, "volume": dataSectors[i].volume}).then(function(results) { console.log(results.insertId); });
     }
     for(var i=0; i< dataLines.length; i++){
-        $scope.db.insert('lines', {"id": dataLines[i].id, "name": dataLines[i].name, "grade": dataLines[i].grade, "rate": dataLines[i].rate, "latitude": dataLines[i].latitude, "longitude": dataLines[i].longitude, "description": dataLines[i].description, "image": dataLines[i].image, "site": dataLines[i].site, "sector": dataLines[i].sector}).then(function(results) { console.log(results.insertId); });
+        db.insert('lines', {"id": dataLines[i].id, "name": dataLines[i].name, "grade": dataLines[i].grade, "rate": dataLines[i].rate, "latitude": dataLines[i].latitude, "longitude": dataLines[i].longitude, "description": dataLines[i].description, "image": dataLines[i].image, "site": dataLines[i].site, "sector": dataLines[i].sector}).then(function(results) { console.log(results.insertId); });
     }
     for(var i=0; i< dataParkings.length; i++){
-        $scope.db.insert('parkings', {"id": dataParkings[i].id, "latitude": dataParkings[i].latitude, "longitude": dataParkings[i].longitude, "site": dataParkings[i].site}).then(function(results) { console.log(results.insertId); });
+        db.insert('parkings', {"id": dataParkings[i].id, "latitude": dataParkings[i].latitude, "longitude": dataParkings[i].longitude, "site": dataParkings[i].site}).then(function(results) { console.log(results.insertId); });
     }
 
-                 
                  
                  
                  
@@ -128,10 +128,17 @@ myApp.controller('mainController', function($scope, localStorageService, $locati
 
 
 
-myApp.controller('SiteListCtrl', function($scope, $location, localStorageService) {
-	
-	$scope.sites = [];
-	//This should be factorize in local storage?
+myApp.controller('SiteListCtrl', function($scope, $location, localStorageService, $webSql) {
+
+                 
+    db.selectAll("sites").then(function(results) {
+        $scope.sites = [];
+        for(i=0; i < results.rows.length; i++){
+                $scope.sites.push(results.rows.item(i));
+        }
+    });
+                 
+/* Local storage method
 	hasNext = true;
 	i = 1;
 	while(hasNext){
@@ -141,7 +148,7 @@ myApp.controller('SiteListCtrl', function($scope, $location, localStorageService
 			hasNext = false;
 		}
 	}
-	
+*/
 	
 	$scope.detail = function(siteId) {
 		$location.path('/site/' + siteId);
@@ -152,7 +159,12 @@ myApp.controller('SiteListCtrl', function($scope, $location, localStorageService
                  
 myApp.controller('SiteDetailCtrl', function($scope, $routeParams, $location, localStorageService) {
 	id = parseInt($routeParams.siteId);
-	$scope.site = localStorageService.get('site.'+ id);
+                 $scope.site = {};
+    db.select("sites", { "id": { "value": id}}).then(function(results) {
+                $scope.site = results.rows.item(0);
+});
+    alert($scope.site.id);
+    //$scope.site = localStorageService.get('site.'+ id);
 	
 	/* Get child sector */
 	$scope.sectors = [];
@@ -433,24 +445,24 @@ myApp.controller('photoCtrl', function($scope, $rootScope) {
 
 myApp.controller('dbCtrl', function($scope, $webSql) {
     
-    $scope.db = $webSql.openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024);
+
 
                  
-    $scope.db.selectAll("sites").then(function(results) {
+    db.selectAll("sites").then(function(results) {
         $scope.sites = [];
         alert(results.rows.length);
         for(i=0; i < results.rows.length; i++){
             $scope.sites.push(results.rows.item(i));
         }
     });
-    $scope.db.selectAll("sectors").then(function(results) {
+    db.selectAll("sectors").then(function(results) {
         $scope.sectors = [];
         alert(results.rows.length);
         for(i=0; i < results.rows.length; i++){
             $scope.sectors.push(results.rows.item(i));
         }
     });
-    $scope.db.selectAll("lines").then(function(results) {
+    db.selectAll("lines").then(function(results) {
         $scope.lines = [];
         alert(results.rows.length);
         for(i=0; i < results.rows.length; i++){
@@ -459,7 +471,7 @@ myApp.controller('dbCtrl', function($scope, $webSql) {
     });
                  
                  
-    $scope.db.selectAll("parkings").then(function(results) {
+    db.selectAll("parkings").then(function(results) {
         $scope.parkings = [];
         alert(results.rows.length);
         for(i=0; i < results.rows.length; i++){
