@@ -42,7 +42,7 @@ myApp.controller('mainController', function($scope, localStorageService, $locati
         db.insert('sites', {"id": dataSites[i].id, "name": dataSites[i].name, "description": dataSites[i].description, "tags": dataSites[i].tags, "couverture": dataSites[i].couverture, "latitude": dataSites[i].latitude, "longitude": dataSites[i].longitude, "volume": dataSites[i].volume}).then(function(results) { console.log(results.insertId); });
     }
     for(var i=0; i< dataSectors.length; i++){
-        db.insert('sectors', {"id": dataSectors[i].id, "name": dataSectors[i].name, "latitude": dataSectors[i].latitude, "longitude": dataSectors[i].longitude, "approach": dataSectors[i].approach, "volume": dataSectors[i].volume}).then(function(results) { console.log(results.insertId); });
+        db.insert('sectors', {"id": dataSectors[i].id, "name": dataSectors[i].name, "latitude": dataSectors[i].latitude, "longitude": dataSectors[i].longitude, "approach": dataSectors[i].approach, "volume": dataSectors[i].volume, "site": dataSectors[i].site}).then(function(results) { console.log(results.insertId); });
     }
     for(var i=0; i< dataLines.length; i++){
         db.insert('lines', {"id": dataLines[i].id, "name": dataLines[i].name, "grade": dataLines[i].grade, "rate": dataLines[i].rate, "latitude": dataLines[i].latitude, "longitude": dataLines[i].longitude, "description": dataLines[i].description, "image": dataLines[i].image, "site": dataLines[i].site, "sector": dataLines[i].sector}).then(function(results) { console.log(results.insertId); });
@@ -130,7 +130,6 @@ myApp.controller('mainController', function($scope, localStorageService, $locati
 
 myApp.controller('SiteListCtrl', function($scope, $location, localStorageService, $webSql) {
 
-                 
     db.selectAll("sites").then(function(results) {
         $scope.sites = [];
         for(i=0; i < results.rows.length; i++){
@@ -138,17 +137,6 @@ myApp.controller('SiteListCtrl', function($scope, $location, localStorageService
         }
     });
                  
-/* Local storage method
-	hasNext = true;
-	i = 1;
-	while(hasNext){
-		$scope.sites[i-1] = localStorageService.get('site.' + i);
-		i++;
-		if(localStorageService.get('site.' + i) === null) {
-			hasNext = false;
-		}
-	}
-*/
 	
 	$scope.detail = function(siteId) {
 		$location.path('/site/' + siteId);
@@ -157,57 +145,49 @@ myApp.controller('SiteListCtrl', function($scope, $location, localStorageService
 
 
                  
-myApp.controller('SiteDetailCtrl', function($scope, $routeParams, $location, localStorageService) {
+myApp.controller('SiteDetailCtrl', function($scope, $routeParams, $location, localStorageService, $webSql) {
+    
+    $scope.map = { center: { latitude: 0, longitude: 0 }, zoom: 16 };
 	id = parseInt($routeParams.siteId);
+                    var sita = localStorageService.get('site.'+ id); // nécessaire pour la map mais devrait être remplacé par les coordonnées du sector actuel
                  $scope.site = {};
-    db.select("sites", { "id": { "value": id}}).then(function(results) {
-                $scope.site = results.rows.item(0);
-});
-    alert($scope.site.id);
-    //$scope.site = localStorageService.get('site.'+ id);
+    db.select("sites", { "id": { "value": id}}).then(function(results) { $scope.site = results.rows.item(0);
+
 	
+                 
 	/* Get child sector */
-	$scope.sectors = [];
-	hasNext = true;
-	i = 1;
-	while(hasNext){
-		sector = localStorageService.get('sector.' + i);
-		
-		if( sector.site === id ){
-			$scope.sectors.push(sector);
-		}
-		
-		i++;
-		if(localStorageService.get('sector.' + i) === null) {
-			hasNext = false;
-		}
-	}
-	
+                 
+    $scope.sectors = [];
+    db.select("sectors",{"site":{"value":id}}).then(function(results) {
+      for(var i=0; i < results.rows.length; i++){
+            $scope.sectors.push(results.rows.item(i));
+        }
+    
+                 
+                 
+                 
+    
     /* Get child parkings */
     $scope.parkings = [];
-    hasNext = true;
-    i = 1;
-    while(hasNext){
-        parking = localStorageService.get('parking.' + i);
-                 
-        if( sector.site === id ){
-            $scope.parkings.push(parking);
-        }
-                 
-        i++;
-        if(localStorageService.get('parking.' + i) === null) {
-            hasNext = false;
-        }
-    }
-                 
-	$scope.map = {
-		    center: {
-		        latitude: $scope.site.latitude,
-		        longitude: $scope.site.longitude
-		    },
-		    zoom: 16
-		};
+    $scope.map = {};
+    db.selectAll("parkings").then(function(results) {
+                
+                for(var i=0; i < results.rows.length; i++){
+                        $scope.parkings.push(results.rows.item(i));
+                };
     
+    makeMap();
+    });
+    }); // sector
+    }); // site
+    
+                 
+                 
+    makeMap = function() {
+        $scope.map = { center: { latitude: sita.latitude, longitude: sita.longitude }, zoom: 16 };
+        $scope.mapState = true;
+    };
+                 
     $scope.lineList = function(siteId,sectorId) {
             $location.path('/site/' + siteId + '/sector/' + sectorId);
     };
@@ -215,59 +195,58 @@ myApp.controller('SiteDetailCtrl', function($scope, $routeParams, $location, loc
 
 
 
-myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter, localStorageService) {
+myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter, localStorageService, $webSql) {
+    $scope.map = { center: { latitude: 0, longitude: 0 }, zoom: 16 };
     id = parseInt($routeParams.siteId);
     idd = parseInt($routeParams.sectorId);
-    $scope.site = localStorageService.get('site.'+ id); // nécessaire pour la map mais devrait être remplacé par les coordonnées du sector
+    var sita = localStorageService.get('site.'+ id); // nécessaire pour la map mais devrait être remplacé par les coordonnées du sector actuel
     
     $scope.currency = idd;
                  
     $filtering = function(items,x) {
-            $result = [];
-            for (var i = 0; i < items.length; i++) {
-                var item = items[i];
-                if(item.sector === x) { $result.push(item); }
-            }
-            return $result;
+        $result = [];
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if(item.sector === x) { $result.push(item); }
+        }
+        return $result;
     };
+                 
+    $scope.site = {};
+    $scope.list = [];
+    $scope.lines = [];
+    $scope.sectors = [];
+    db.select("sites", { "id": { "value": id}}).then(function(results) { $scope.site = results.rows.item(0);
+                 
+
     
     /* Get child sector */
-    $scope.sectors = [];
-    hasFollow = true;
-    j = 1;
-    while(hasFollow){
-        sector = localStorageService.get('sector.' + j);
-                 
-        if( sector.site === id ){
-                 if( sector.id === idd ){
-                 sector.check = "selected";  
-                 }
-                 $scope.sectors.push(sector);
+
+    db.select("sectors",{"site":{"value":id}}).then(function(results) {
+        for(var i=0; i < results.rows.length; i++){
+            $scope.sectors.push(results.rows.item(i));
+        }
+    
+
                 
-        }
-        j++;
-        if(localStorageService.get('sector.' + j) === null) {
-            hasFollow = false;
-        }
-    }
                 
     
     /* Get child line */
-    $scope.list = [];
-    hasNext = true;
-    i = 1;
-    while(hasNext){
-        line = localStorageService.get('line.' + i);
-                 
-        if( line.site === id ){
-            $scope.list.push(line);
+
+    db.select("lines",{"site":{"value":id}}).then(function(results) {
+        for(var i=0; i < results.rows.length; i++){
+            $scope.list.push(results.rows.item(i));
+            if(results.rows.item(i).sector == idd){
+                $scope.lines.push(results.rows.item(i));
+            }
         }
+                                                  
+    makeMap();
+    });
+    });
+    });
                  
-        i++;
-        if(localStorageService.get('line.' + i) === null) {
-            hasNext = false;
-        }
-    }
+                 
                  
     $scope.select = function(xid) {
         if(xid === 0){
@@ -275,19 +254,17 @@ myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter
             $scope.lines = $scope.list;
         }
         else{
-            $scope.current = localStorageService.get('sector.'+ xid);
+            $scope.current = {};
+            db.select("sectors", { "id": { "value": xid}}).then(function(results) { $scope.current = results.rows.item(0);});
             $scope.lines = $filtering($scope.list,xid);
         }
     };
 
+                
                  
-                 
-    $scope.map = {
-        center: {
-            latitude: $scope.site.latitude,
-            longitude: $scope.site.longitude
-        },
-        zoom: 16
+    makeMap = function() {
+        $scope.map = { center: { latitude: sita.latitude, longitude: sita.longitude }, zoom: 16 };
+        $scope.mapState = true;
     };
                  
     $scope.maping = function(siteId,sectorId) {
@@ -308,7 +285,7 @@ myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter
 
 
 myApp.controller('LineListCtrl', function($scope, $location, localStorageService) {
-/* CURRENTLY UNUSED!!!!!!!!!!!!!!!!! */
+/* CURRENTLY UNUSED!!!!!!!!!!!!!!!!! STILL UNDER LOCAL STORAGE*/
 	$scope.lines = [];
 	hasNext = true;
 	i = 1;
@@ -337,11 +314,11 @@ myApp.controller('LineListCtrl', function($scope, $location, localStorageService
 	};
 });
 
-myApp.controller('LineDetailCtrl', function($scope, $routeParams, $location, localStorageService) {
+myApp.controller('LineDetailCtrl', function($scope, $routeParams, $location, localStorageService, $webSql) {
 	id = parseInt($routeParams.lineId);
-    idSite = parseInt($routeParams.siteId);
-	$scope.line = localStorageService.get('line.'+ id);
-    $scope.site = localStorageService.get('site.'+ id);
+	
+    $scope.line = {};
+    db.select("lines", { "id": { "value": id}}).then(function(results) { $scope.line = results.rows.item(0);});
 
     $scope.backSector = function(siteId,sectorId) {
             $location.path('/site/' + siteId + '/sector/' + sectorId);

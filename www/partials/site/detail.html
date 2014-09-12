@@ -1,7 +1,7 @@
 
 <div class="couverture">
     <div class="title"> <h2  align="center" ng-bind-html="site.name"> </h2>
-        <p align="center" ng-bind-html="site.tag"> </p>
+        <p align="center" ng-bind-html="site.tags"> </p>
     </div>
     <img class="image" ng-src="img/{{site.couverture}}"/>
     
@@ -21,14 +21,16 @@
 <div class="row actif" ng-repeat="sector in sectors" ng-click="lineList(site.id,sector.id)" >
     <h4>
         <div class="col-xs-8" ng-bind-html="sector.name"> </div>
-        <div class="col-xs-4" ng-bind-html="sector.approach"> </div>
+        <div class="col-xs-4"> {{sector.approach}} min </div>
     </h4>
 </div>
 
 <br>
+
 <div class="map-site">
-    <google-map center="map.center" zoom="map.zoom" draggable="true">
+    <google-map center="map.center" zoom="map.zoom" draggable="true" refresh="mapState">
         <markers models="sectors" coords="'self'"> </markers>
         <markers models="parkings" coords="'self'"> </markers>
     </google-map>
 </div>
+
