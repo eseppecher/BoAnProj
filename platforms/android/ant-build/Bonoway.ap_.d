@@ -154,6 +154,11 @@
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/html/parkings.html \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/html/sectors.html \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/html/sites.html \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/img/a.jpg \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/img/a1.jpg \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/img/a2.jpg \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/img/a3.jpg \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/img/a6.jpg \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/img/fenou-espigoule1.jpg \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/img/fenou-espigoule2.jpg \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/img/fenou-parking1.jpg \
@@ -196,10 +201,12 @@
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/img/img_0661.jpg \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/img/roquebrune.jpg \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/img/sabot.jpg \
-/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/js/bootstrap-select.js \
-/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/js/bootstrap-select.min.js \
-/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/js/index.js \
-/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/js/jquery.js \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/js/angular-resource.min.js \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/js/angular-route.min.js \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/js/angular-sanitize.js \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/js/angular.min.js \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/js/jquery-2.1.1.min.js \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/js/modernizr.min.js \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/node_modules/grunt \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/node_modules/grunt-contrib-clean \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/node_modules/grunt-contrib-jshint \
@@ -3080,7 +3087,6 @@
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/partials/search.html \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/partials/site \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/partials/line/detail.html \
-/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/partials/line/list.html \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/partials/site/detail.html \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/partials/site/list.html \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/partials/site/map.html \

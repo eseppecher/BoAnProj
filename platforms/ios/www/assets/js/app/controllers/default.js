@@ -1,6 +1,20 @@
 
 var db;
 
+myApp.filter('makeRate', function ($filter) {
+             return function (input) {
+             if(input === -1){ return ''; }
+             if(input === 0){ return '<span class="glyphicon glyphicon-thumbs-down"></span>'; }
+             if(input === 1){ return '<span class="glyphicon glyphicon-star"></span>'; }
+             if(input === 2){ return '<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span>'; }
+             if(input === 3){ return '<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span>'; }
+           
+             
+             return "-";
+             };
+});
+
+
 //Main controller
 myApp.controller('mainController', function($scope, localStorageService, $location, $webSql) {
 
@@ -221,7 +235,6 @@ myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter
 
     
     /* Get child sector */
-
     db.select("sectors",{"site":{"value":id}}).then(function(results) {
         for(var i=0; i < results.rows.length; i++){
             $scope.sectors.push(results.rows.item(i));
@@ -284,41 +297,12 @@ myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter
 });
 
 
-myApp.controller('LineListCtrl', function($scope, $location, localStorageService) {
-/* CURRENTLY UNUSED!!!!!!!!!!!!!!!!! STILL UNDER LOCAL STORAGE*/
-	$scope.lines = [];
-	hasNext = true;
-	i = 1;
-	while(hasNext){
-		$scope.lines[i-1] = localStorageService.get('line.' + i);
-		i++;
-		if(localStorageService.get('line.' + i) === null) {
-			hasNext = false;
-		}
-	}
-                 
-    $scope.sites = [];
-    //This should be factorize in local storage?
-    hasNext = true;
-    j = 1;
-    while(hasNext){
-        $scope.sites[j] = localStorageService.get('site.' + j);
-        j++;
-        if(localStorageService.get('site.' + j) === null) {
-            hasNext = false;
-        }
-    }
-	
-	$scope.detail = function(lineId) {
-		$location.path('/line/' + lineId);
-	};
-});
 
-myApp.controller('LineDetailCtrl', function($scope, $routeParams, $location, localStorageService, $webSql) {
+myApp.controller('LineDetailCtrl', function($scope, $routeParams, $location, localStorageService, $webSql, $filter) {
 	id = parseInt($routeParams.lineId);
 	
     $scope.line = {};
-    db.select("lines", { "id": { "value": id}}).then(function(results) { $scope.line = results.rows.item(0);});
+    db.select("lines", { "id": { "value": id}}).then(function(results) { $scope.line = results.rows.item(0); });
 
     $scope.backSector = function(siteId,sectorId) {
             $location.path('/site/' + siteId + '/sector/' + sectorId);

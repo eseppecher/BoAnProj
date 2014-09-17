@@ -1,29 +1,30 @@
 <div class="secondarybar">
     <a  href ng-click="backSector(line.site,line.sector)"  class="back"> <i class="fa fa-chevron-left"></i> </a>
-    <a href href="map.html" class="pull-right switch"> <i class="fa fa-map-marker"></i> </a>
 </div>
 
 
+<div class="line-detail"><h2>
+    <div class="title" ng-bind-html="line.name"> </div>
+    <div class="title" ng-bind-html="line.grade"> </div>
+    <div class="title" ng-bind-html="line.rate | makeRate"> </div>
+</h2></div>
 
 
 
-<div class="row" onClick="window.location.href = 'lineView.html';">
-    <h4>
-        <div class="col-xs-7"> {{line.name}} </div>
-        <div class="col-xs-2" id="row1"> {{line.grade}} </div>
-        <div class="col-xs-3" id="row1"> {{line.rate}} </div>
-    </h4>
+
+
+<img alt="logo" width="100%" height="auto" ng-src="datas/img/{{line.image}}">
+
+<h4> <div class="row">
+    <div class="col-xs-7"> {{line.name}} </div>
+    <div class="col-xs-2" id="row1"> {{line.grade}} </div>
+    <div class="col-xs-3" id="row1" ng-bind-html="line.rate | makeRate"></div>
+</div></h4>
+
+<div class="row">
+    <div class="col-xs-12">  @siteLink #tags </div>
 </div>
-
-<div class="row" onClick="window.location.href = 'lineView.html';">
-    <div class="col-xs-12">  @RocheAuSabot #debout #expo #highball </div>
 </div>
-</div>
-
-
-<img alt="logo" width="100%" height="auto" ng-src="datas/img/lines/{{line.id}}/{{line.image}}">
-
-
 
 <div class="container">
 
