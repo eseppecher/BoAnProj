@@ -3,32 +3,26 @@
 </div>
 
 
-<div class="line-detail"><h2>
+<div class="line-detail"><h3>
     <div class="title" ng-bind-html="line.name"> </div>
     <div class="title" ng-bind-html="line.grade"> </div>
     <div class="title" ng-bind-html="line.rate | makeRate"> </div>
-</h2></div>
-
-
+</h3> <br>
+<h4>
+<div class="title"> @siteLink/sectorlink </div>
+<div class="title"> #tag1 #rag2 </div>
+</h4>
+</div>
 
 
 
 <img alt="logo" width="100%" height="auto" ng-src="datas/img/{{line.image}}">
 
-<h4> <div class="row">
-    <div class="col-xs-7"> {{line.name}} </div>
-    <div class="col-xs-2" id="row1"> {{line.grade}} </div>
-    <div class="col-xs-3" id="row1" ng-bind-html="line.rate | makeRate"></div>
-</div></h4>
 
-<div class="row">
-    <div class="col-xs-12">  @siteLink #tags </div>
-</div>
-</div>
 
 <div class="container">
 
-    <h5> Description :  </h5>
+    <h4> Description :  </h4>
         
         <p> {{line.description}} </p>
         

@@ -153,7 +153,9 @@
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/html/lines.html \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/html/parkings.html \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/html/sectors.html \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/html/sectors2.html \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/html/sites.html \
+/Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/html/sites2.html \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/img/a.jpg \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/img/a1.jpg \
 /Users/etienne/Workspace/AngularAppProject4/platforms/android/assets/www/datas/img/a2.jpg \

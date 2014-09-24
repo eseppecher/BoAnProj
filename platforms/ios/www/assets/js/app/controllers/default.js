@@ -3,7 +3,7 @@ var db;
 
 myApp.filter('makeRate', function ($filter) {
              return function (input) {
-             if(input === -1){ return ''; }
+             if(input === null){ return ''; }
              if(input === 0){ return '<span class="glyphicon glyphicon-thumbs-down"></span>'; }
              if(input === 1){ return '<span class="glyphicon glyphicon-star"></span>'; }
              if(input === 2){ return '<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span>'; }
@@ -31,7 +31,7 @@ myApp.controller('mainController', function($scope, localStorageService, $locati
     $.ajax({ url: 'datas/html/sectors.html', type:'get', async:false, success: function(html, $scope) { dataSectors = angular.fromJson( String(html)); } });
     $.ajax({ url: 'datas/html/lines.html', type:'get', async:false, success: function(html, $scope) { dataLines = angular.fromJson( String(html)); } });
     $.ajax({ url: 'datas/html/parkings.html', type:'get', async:false, success: function(html, $scope) { dataParkings = angular.fromJson( String(html)); } });
-           
+    
                  
     db = $webSql.openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024); // opening db
     
@@ -213,6 +213,7 @@ myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter
     $scope.map = { center: { latitude: 0, longitude: 0 }, zoom: 16 };
     id = parseInt($routeParams.siteId);
     idd = parseInt($routeParams.sectorId);
+    //A MODIFIER!!!!!!!
     var sita = localStorageService.get('site.'+ id); // nécessaire pour la map mais devrait être remplacé par les coordonnées du sector actuel
     
     $scope.currency = idd;
@@ -230,19 +231,15 @@ myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter
     $scope.list = [];
     $scope.lines = [];
     $scope.sectors = [];
-    db.select("sites", { "id": { "value": id}}).then(function(results) { $scope.site = results.rows.item(0);
-                 
-
-    
+    db.select("sites", { "id": { "value": id}}).then(function(results) {
+        $scope.site = results.rows.item(0);
+                     
     /* Get child sector */
     db.select("sectors",{"site":{"value":id}}).then(function(results) {
         for(var i=0; i < results.rows.length; i++){
             $scope.sectors.push(results.rows.item(i));
         }
     
-
-                
-                
     
     /* Get child line */
 
@@ -298,7 +295,7 @@ myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter
 
 
 
-myApp.controller('LineDetailCtrl', function($scope, $routeParams, $location, localStorageService, $webSql, $filter) {
+myApp.controller('LineDetailCtrl', function($scope, $routeParams, $location, $webSql, $filter) {
 	id = parseInt($routeParams.lineId);
 	
     $scope.line = {};
@@ -309,88 +306,54 @@ myApp.controller('LineDetailCtrl', function($scope, $routeParams, $location, loc
     };
 	                     
 });
-
-
-myApp.controller('addCtrl', function($scope, $location, localStorageService) {
     
 
-    $scope.sites = [];
-    //This should be factorize in local storage?
-    hasNext = true;
-    i = 1;
-    while(hasNext){
-        $scope.sites[i] = localStorageService.get('site.' + i);
-        $scope.sites[i].type = "site";
-        i++;
-        if(localStorageService.get('site.' + i) === null) {
-            hasNext = false;
-        }
-    }
-    
-    $scope.sectors = [];
-    //This should be factorize in local storage?
-    hasNext = true;
-    i = 1;
-    while(hasNext){
-        $scope.sectors[i] = localStorageService.get('sector.' + i);
-        $scope.sectors[i].type = "sector";
-        i++;
-        if(localStorageService.get('sector.' + i) === null) {
-             hasNext = false;
-        }
-    }
-
-                 $scope.myPictures = [];
-                 $scope.$watch('myPicture', function(value) {
-                               if(value) {
-                               myPictures.push(value);
-                               }
-                               }, true);
+myApp.controller('searchCtrl', function($scope, $location) {
                  
-                 
-});
-
-myApp.controller('searchCtrl', function($scope, $location, localStorageService) {
-    $scope.title	= 'Search';
-    $scope.message	= 'En dévelopement';
     $scope.activeType = "all";
     $scope.setSearchType = function (activeType) {
                  $scope.activeType = activeType;
     };
                  
-    $scope.sites = [];
-    //This should be factorize in local storage?
-    hasNext = true;
-    i = 1;
-    while(hasNext){
-        
-        $scope.sites[i-1] = localStorageService.get('site.' + i);
-        $scope.sites[i-1].type = "site";
-        i++;
-        if(localStorageService.get('site.' + i) === null) {
-            hasNext = false;
-        }
-    }
-                 
-             
-    $scope.lines = [];
-    hasNext = true;
-    i = 1;
-                 
-    while(hasNext){
-        $scope.lines[i-1] = localStorageService.get('line.' + i);
-        currentsite = localStorageService.get('site.' + $scope.lines[i-1].site);
-        $scope.lines[i-1].sitename = currentsite.name;
-        
-        i++;
-        if(localStorageService.get('line.' + i) === null) {
-            hasNext = false;
-        }
-    }
     
+    $scope.search = function(xput){
+                 var yput = '%%%%%%%%%%%%%%%%%%' + xput + '%%%%%%%%%%%%%%%%%%%%';
+                 $scope.resultings = [];
+                 
+                 // search char in larger char
+                 db.select("lines", { "name": { "operator":'LIKE', "value": yput}}).then(function(results) {
+                    for(var i=0; i < results.rows.length; i++){
+                        $scope.resultings.push(results.rows.item(i));
+                    }
+                });
+                                                                                         
+                // search approximate char
+                for(var i=0; i<xput.length; i++){
+                    var stringy = '%%%%%%%%%%%%%%%%%%' + xput.substr(0,i) + "_" + xput.substr(i+1,xput.length) + '%%%%%%%%%%%%%%%%%%%%';
+                                                                                         
+                    db.select("lines", { "name": { "operator":'LIKE', "value": stringy}}).then(function(results) {
+                            for(var i=0; i < results.rows.length; i++){
+                                var doublon = false;
+                                // avoiding doublon
+                                for(var j=0;j<$scope.resultings.length;j++){
+                                    if($scope.resultings[j].id===results.rows.item(i).id){
+                                         doublon = true;
+                                    }
+                                }
+                                if(doublon===false){$scope.resultings.push(results.rows.item(i));}
+                            }
+                });
+        };
+                                                 
+    }
+
+                 
+
     $scope.detailSite = function(siteId) { $location.path('/site/' + siteId); };
     $scope.detailLine = function(lineId) { $location.path('/line/' + lineId); };
 });
+
+
 
 myApp.controller('photoCtrl', function($scope, $rootScope) {
                  
@@ -404,51 +367,6 @@ myApp.controller('photoCtrl', function($scope, $rootScope) {
 
 });
 
-myApp.controller('dbCtrl', function($scope, $webSql) {
-    
-
-
-                 
-    db.selectAll("sites").then(function(results) {
-        $scope.sites = [];
-        alert(results.rows.length);
-        for(i=0; i < results.rows.length; i++){
-            $scope.sites.push(results.rows.item(i));
-        }
-    });
-    db.selectAll("sectors").then(function(results) {
-        $scope.sectors = [];
-        alert(results.rows.length);
-        for(i=0; i < results.rows.length; i++){
-            $scope.sectors.push(results.rows.item(i));
-        }
-    });
-    db.selectAll("lines").then(function(results) {
-        $scope.lines = [];
-        alert(results.rows.length);
-        for(i=0; i < results.rows.length; i++){
-            $scope.lines.push(results.rows.item(i));
-        }
-    });
-                 
-                 
-    db.selectAll("parkings").then(function(results) {
-        $scope.parkings = [];
-        alert(results.rows.length);
-        for(i=0; i < results.rows.length; i++){
-            $scope.parkings.push(results.rows.item(i));
-        }
-    });
-                 
-   /* $scope.db.select("lines", { "site": { "value": 1, "union": 'AND'}, "sector": {"value": 2}}).then(function(results) {
-            $scope.lines = [];
-            for(i=0; i < results.rows.length; i++){
-                $scope.lines.push(results.rows.item(i));
-            }
-    }); */
-
-                 
-});
 
 myApp.controller('aboutCtrl', function($scope, $rootScope) {
 	$scope.title	= 'A propos';

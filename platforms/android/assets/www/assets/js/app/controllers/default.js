@@ -3,7 +3,7 @@ var db;
 
 myApp.filter('makeRate', function ($filter) {
              return function (input) {
-             if(input === -1){ return ''; }
+             if(input === null){ return ''; }
              if(input === 0){ return '<span class="glyphicon glyphicon-thumbs-down"></span>'; }
              if(input === 1){ return '<span class="glyphicon glyphicon-star"></span>'; }
              if(input === 2){ return '<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span>'; }
@@ -31,7 +31,7 @@ myApp.controller('mainController', function($scope, localStorageService, $locati
     $.ajax({ url: 'datas/html/sectors.html', type:'get', async:false, success: function(html, $scope) { dataSectors = angular.fromJson( String(html)); } });
     $.ajax({ url: 'datas/html/lines.html', type:'get', async:false, success: function(html, $scope) { dataLines = angular.fromJson( String(html)); } });
     $.ajax({ url: 'datas/html/parkings.html', type:'get', async:false, success: function(html, $scope) { dataParkings = angular.fromJson( String(html)); } });
-           
+    
                  
     db = $webSql.openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024); // opening db
     
