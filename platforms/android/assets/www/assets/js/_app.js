@@ -4,10 +4,10 @@ var myApp = angular.module('myApp', [
           'LocalStorageModule',
           'ngSanitize',
           'google-maps',
-           'angular-websql'
+           'angular-websql',
+           'ngTouch'
                         
           ]);
-
 
 
 myApp.config(['localStorageServiceProvider', function(localStorageServiceProvider){

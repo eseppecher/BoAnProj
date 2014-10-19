@@ -1,4 +1,5 @@
 
+
 var db;
 
 myApp.filter('makeRate', function ($filter) {
@@ -9,7 +10,6 @@ myApp.filter('makeRate', function ($filter) {
              if(input === 2){ return '<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span>'; }
              if(input === 3){ return '<span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span>'; }
            
-             
              return "-";
              };
 });
@@ -58,8 +58,10 @@ myApp.controller('mainController', function($scope, $location, $webSql) {
     for(var i=0; i< dataSectors.length; i++){
         db.insert('sectors', {"id": dataSectors[i].id, "name": dataSectors[i].name, "latitude": dataSectors[i].latitude, "longitude": dataSectors[i].longitude, "approach": dataSectors[i].approach, "volume": dataSectors[i].volume, "site": dataSectors[i].site}).then(function(results) { console.log(results.insertId); });
     }
+    var draft = "";
     for(var i=0; i< dataLines.length; i++){
-        db.insert('lines', {"id": dataLines[i].id, "name": dataLines[i].name, "grade": dataLines[i].grade, "rate": dataLines[i].rate, "latitude": dataLines[i].latitude, "longitude": dataLines[i].longitude, "description": dataLines[i].description, "image": dataLines[i].image, "site": dataLines[i].site, "sector": dataLines[i].sector}).then(function(results) { console.log(results.insertId); });
+        if(dataLines[i].description===""){draft="Pas de description.";}else{draft=dataLines[i].description}
+        db.insert('lines', {"id": dataLines[i].id, "name": dataLines[i].name, "grade": dataLines[i].grade, "rate": dataLines[i].rate, "latitude": dataLines[i].latitude, "longitude": dataLines[i].longitude, "description": draft, "image": dataLines[i].image, "site": dataLines[i].site, "sector": dataLines[i].sector}).then(function(results) { console.log(results.insertId); });
     }
     for(var i=0; i< dataParkings.length; i++){
         db.insert('parkings', {"id": dataParkings[i].id, "latitude": dataParkings[i].latitude, "longitude": dataParkings[i].longitude, "site": dataParkings[i].site}).then(function(results) { console.log(results.insertId); });
@@ -226,14 +228,28 @@ myApp.controller('SectorCtrl', function($scope, $routeParams, $location, $filter
 
 
 
-myApp.controller('LineDetailCtrl', function($scope, $routeParams, $location, $webSql, $filter) {
+myApp.controller('LineDetailCtrl', function($scope, $routeParams, $location, $webSql, $filter, $swipe, $ngSwipeLeft) {
 	id = parseInt($routeParams.lineId);
+    
+                 
+                 
 	
     $scope.line = {};
     db.select("lines", { "id": { "value": id}}).then(function(results) { $scope.line = results.rows.item(0); });
 
     $scope.backSector = function(siteId,sectorId) {
             $location.path('/site/' + siteId + '/sector/' + sectorId);
+    };
+                 
+    $scope.previous = function(lineId) {
+            var x = lineId-1;
+            $location.path('/line/' + x);
+    };
+                 
+                 
+    $scope.next = function(lineId) {
+            var x = lineId+1;
+            $location.path('/line/' + x);
     };
 	                     
 });
@@ -247,37 +263,65 @@ myApp.controller('searchCtrl', function($scope, $location) {
     };
                  
     
-    $scope.search = function(xput){
-                 var yput = '%%%%%%%%%%%%%%%%%%' + xput + '%%%%%%%%%%%%%%%%%%%%';
-                 $scope.resultings = [];
+    $scope.search = function(input){
+        var inputLarge = '%%%%%%%%%%%%%%%%%%' + input + '%%%%%%%%%%%%%%%%%%%%';
+        $scope.resultings = [];
                  
-                 // search char in larger char
-                 db.select("lines", { "name": { "operator":'LIKE', "value": yput}}).then(function(results) {
+        // search char in larger char
+        if($scope.activeType !== 'sites' ){
+            db.select("lines", { "name": { "operator":'LIKE', "value": inputLarge}}).then(function(results) {
+                for(var i=0; i < results.rows.length; i++){
+                    $scope.resultings.push(results.rows.item(i));
+                }
+            });
+                                                                                         
+            // search approximate char
+            for(var i=0; i<input.length; i++){
+                var stringy = '%%%%%%%%%%%%%%%%%%' + input.substr(0,i) + "_" + input.substr(i+1,input.length) + '%%%%%%%%%%%%%%%%%%%%';
+                                                                                         
+                db.select("lines", { "name": { "operator":'LIKE', "value": stringy}}).then(function(results) {
                     for(var i=0; i < results.rows.length; i++){
-                        $scope.resultings.push(results.rows.item(i));
+                        var doublon = false;
+                        // avoiding doublon
+                        for(var j=0;j<$scope.resultings.length;j++){
+                            if($scope.resultings[j].id===results.rows.item(i).id){
+                                doublon = true;
+                            }
+                        }
+                        if(doublon===false){$scope.resultings.push(results.rows.item(i));}
                     }
                 });
-                                                                                         
-                // search approximate char
-                for(var i=0; i<xput.length; i++){
-                    var stringy = '%%%%%%%%%%%%%%%%%%' + xput.substr(0,i) + "_" + xput.substr(i+1,xput.length) + '%%%%%%%%%%%%%%%%%%%%';
-                                                                                         
-                    db.select("lines", { "name": { "operator":'LIKE', "value": stringy}}).then(function(results) {
-                            for(var i=0; i < results.rows.length; i++){
-                                var doublon = false;
-                                // avoiding doublon
-                                for(var j=0;j<$scope.resultings.length;j++){
-                                    if($scope.resultings[j].id===results.rows.item(i).id){
-                                         doublon = true;
-                                    }
-                                }
-                                if(doublon===false){$scope.resultings.push(results.rows.item(i));}
-                            }
+            }
+        }
+                 
+                 
+                 
+        if($scope.activeType !== 'lines' ){
+            db.select("sites", { "name": { "operator":'LIKE', "value": inputLarge}}).then(function(results) {
+                for(var i=0; i < results.rows.length; i++){
+                    $scope.resultings.push(results.rows.item(i));
+                }
+            });
+                 
+            // search approximate char
+            for(var i=0; i<input.length; i++){
+                var stringy = '%%%%%%%%%%%%%%%%%%' + input.substr(0,i) + "_" + input.substr(i+1,input.length) + '%%%%%%%%%%%%%%%%%%%%';
+                 
+                db.select("sites", { "name": { "operator":'LIKE', "value": stringy}}).then(function(results) {
+                    for(var i=0; i < results.rows.length; i++){
+                        var doublon = false;
+                        // avoiding doublon
+                        for(var j=0;j<$scope.resultings.length;j++){
+                            if($scope.resultings[j].id===results.rows.item(i).id){ doublon = true; }
+                        }
+                        if(doublon===false){$scope.resultings.push(results.rows.item(i));}
+                    }
                 });
-        };
-                                                 
-    }
+            }
+        }
 
+    }
+   
                  
 
     $scope.detailSite = function(siteId) { $location.path('/site/' + siteId); };

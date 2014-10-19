@@ -31,18 +31,10 @@ myApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $
 			templateUrl : 'partials/line/detail.html',
 			controller  : 'LineDetailCtrl'
 		})
-        .when('/add', {
-            templateUrl: 'partials/add.html',
-            controller  : 'addCtrl'
-        })
         .when('/photo', {
             templateUrl: 'partials/photo.html',
             controller  : 'photoCtrl'
         })
-        .when('/db', {
-                    templateUrl: 'partials/db.html',
-                    controller  : 'dbCtrl'
-                    })
         .when('/search', {
                     templateUrl: 'partials/search.html',
                     controller  : 'searchCtrl'
